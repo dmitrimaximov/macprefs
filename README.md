@@ -135,18 +135,7 @@ macprefs restore -t system_preferences startup_items preferences app_store_prefe
 
 If you're setting up a brand new Mac and want to restore your settings, follow these steps:
 
-### 1. Install Homebrew
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Follow the instructions to add Homebrew to your PATH
-# Usually something like:
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-### 2. Clone macprefs
+### 1. Clone macprefs
 
 Since you're using a fork, clone it directly (Python 3 comes pre-installed on modern macOS):
 
@@ -159,13 +148,13 @@ cd ~/macprefs
 chmod +x macprefs
 ```
 
-Alternatively, if you want to use the original version via Homebrew:
+Alternatively, if you want to use the original version, install via Homebrew (requires Homebrew to be installed first):
 
 ```bash
 brew install clintmod/formulas/macprefs
 ```
 
-### 3. Enable Full Disk Access for Terminal
+### 2. Enable Full Disk Access for Terminal
 
 ```bash
 open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
@@ -173,13 +162,13 @@ open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
 
 Add Terminal.app to the Full Disk Access list.
 
-### 4. Set up Dropbox (if using Dropbox for backups)
+### 3. Set up Dropbox (if using Dropbox for backups)
 
 - Download and install [Dropbox](https://www.dropbox.com/install)
 - Sign in and wait for your Configuration/Backup folder to sync
 - Make sure your backup folder is fully synced before proceeding
 
-### 5. Restore your preferences
+### 4. Restore your preferences
 
 ```bash
 # If using the default Dropbox location, just run:
@@ -191,6 +180,19 @@ export MACPREFS_BACKUP_DIR="/path/to/your/backup/folder"
 
 # If you installed via Homebrew instead, just use:
 # macprefs restore
+```
+
+### 5. Install Homebrew (for restoring applications)
+
+Now install Homebrew so you can restore your applications:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Follow the instructions to add Homebrew to your PATH
+# Usually something like:
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
 ### 6. Install your applications via Homebrew
