@@ -33,7 +33,16 @@ brew install clintmod/formulas/macprefs
 
 You can set the MACPREFS_BACKUP_DIR environment variable to specify where you'd like to backup the prefs too.
 
-The default backup directory is `~/Dropbox/MacPrefsBackup`.
+The default backup directory is `~/Dropbox/Configuration/Backup/{machine_name}/{YYYY-MM-DD}`, where:
+- `{machine_name}` is your Mac's hostname (e.g., "dima-macbook-pro")
+- `{YYYY-MM-DD}` is the date of the backup (e.g., "2025-12-26")
+
+This structure allows you to:
+- Store backups from multiple Macs in the same Dropbox folder
+- Keep version history with daily snapshots
+- Easily identify which backup came from which machine
+
+To override the default location:
 
 ```bash
 export MACPREFS_BACKUP_DIR="$HOME/SomeOtherDir"
@@ -55,20 +64,45 @@ macprefs backup -t system_preferences startup_items preferences app_store_prefer
 
 Following backups are currently possible:
 
-
-**`system_preferences`** : Backs up `/Library/Preferences/com.apple.PowerManagement.plist` or `/Library/Preferences/SystemConfiguration/com.apple.PowerManagement.plist`, depending on the availability.
+**`system_preferences`** : Backs up system-level preferences including PowerManagement, TimeMachine, SoftwareUpdate, Bluetooth, and NetworkSharing
 
 **`startup_items`** : Backs up `user launch agents`, `system launch agents` and `system daemon agents`
 
-**`dotfiles`** : Backs up all your `dotfiles` from your home directory.
+**`dotfiles`** : Backs up all your `dotfiles` from your home directory
 
-**`shared_file_lists`** : Backs up `~/Library/Application Support/com.apple.sharedfilelist/`
+**`shared_file_lists`** : Backs up `~/Library/Application Support/com.apple.sharedfilelist/` (Finder sidebar favorites)
 
-**`preferences`** : Backs up `~/Library/Preferences/`
+**`ssh_files`** : Backs up `~/.ssh/` directory including keys and config
+
+**`preferences`** : Backs up `~/Library/Preferences/` (all application preferences)
 
 **`app_store_preferences`** : Backs up your App Store preferences
 
 **`internet_accounts`** : Backs up your `~/Library/Accounts`
+
+**`git_config`** : Backs up `.gitconfig` and `.gitignore_global`
+
+**`cloud_credentials`** : Backs up AWS, Kubernetes, and Docker credentials
+
+**`gpg_keys`** : Backs up GPG keys from `~/.gnupg/`
+
+**`package_managers`** : Backs up Homebrew packages (Brewfile), npm global packages, and asdf tool versions
+
+**`vscode_settings`** : Backs up VS Code settings, keybindings, snippets, and extension list
+
+**`env_configs`** : Backs up environment configuration files (`.aliases`, `.exports`, `.config/`, etc.)
+
+**`jetbrains_settings`** : Backs up JetBrains IDE settings (Rider, IntelliJ, WebStorm, etc.)
+
+**`custom_fonts`** : Backs up custom fonts from `~/Library/Fonts/`
+
+**`applications_list`** : Creates a list of all installed applications and Mac App Store apps (informational only)
+
+**`runtime_versions`** : Records installed runtime versions (.NET, Node, npm, Python, Ruby, Go) (informational only)
+
+**`alfred_settings`** : Backs up Alfred workflows and preferences
+
+**`sublime_settings`** : Backs up Sublime Text and Sublime Merge settings
 
 #### Note:
 
@@ -87,13 +121,91 @@ You can restore your preferences by running:
 macprefs restore
 ```
 
-Similar to **Backing**, you can choose to restore selected preferences by running 
+Similar to **Backing**, you can choose to restore selected preferences by running
 
 ```bash
 macprefs restore -t system_preferences startup_items preferences app_store_preferences internet_accounts
 ```
 
 - **You might have to log out and then log back in for the settings to take effect.**
+
+## New Mac Setup
+
+If you're setting up a brand new Mac and want to restore your settings, follow these steps:
+
+### 1. Install Homebrew
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Follow the instructions to add Homebrew to your PATH
+# Usually something like:
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+### 2. Install macprefs
+
+```bash
+brew install clintmod/formulas/macprefs
+```
+
+### 3. Enable Full Disk Access for Terminal
+
+```bash
+open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
+```
+
+Add Terminal.app to the Full Disk Access list.
+
+### 4. Set up Dropbox (if using Dropbox for backups)
+
+- Download and install [Dropbox](https://www.dropbox.com/install)
+- Sign in and wait for your Configuration/Backup folder to sync
+- Make sure your backup folder is fully synced before proceeding
+
+### 5. Restore your preferences
+
+```bash
+# If using the default Dropbox location, just run:
+macprefs restore
+
+# Or specify a custom backup location:
+export MACPREFS_BACKUP_DIR="/path/to/your/backup/folder"
+macprefs restore
+```
+
+### 6. Install your applications via Homebrew
+
+If you backed up your Homebrew packages, restore them:
+
+```bash
+# Navigate to your backup's package_managers folder
+cd ~/Dropbox/Configuration/Backup/{machine_name}/{date}/package_managers
+
+# Install all packages from the Brewfile
+brew bundle --file=Brewfile
+```
+
+This will automatically install:
+- All command-line tools (git, node, etc.)
+- All GUI applications (Chrome, Slack, Docker, etc.)
+- All fonts
+- Everything else you had installed via Homebrew
+
+### 7. Check the detailed restore guide
+
+After running the backup, a comprehensive `RESTORE.md` guide is generated in your backup folder with step-by-step instructions for:
+- Installing runtime versions (.NET, Node.js)
+- Installing VS Code extensions
+- Installing Mac App Store apps
+- Manual setup steps
+- Troubleshooting common issues
+
+```bash
+# View the restore guide
+open ~/Dropbox/Configuration/Backup/{machine_name}/{date}/RESTORE.md
+```
 
 ## Testing the Restore
 
@@ -121,13 +233,38 @@ chmod -R o=-x ~/Dropbox
 
 ## What it Does
 
+### System & Application Preferences
 - Backs up all the preferences in `~/Library/Preferences` and `/Library/Preferences`
+- Backs up system preferences (PowerManagement, TimeMachine, SoftwareUpdate, Bluetooth, NetworkSharing)
 - Backs up all 'Internet Accounts' databases in `~/Library/Accounts`
-- Backs up PowerManagement preferences
 - Backs up shared file lists (Finder Favorites in Sidebar) `~/Library/Application Support/com.apple.sharedfilelist`
-- Backups up dotfiles ($HOME/.* (e.g. .bash_profile))
-- Backups up the $HOME/.ssh dir
-- Backups launch items `/Library/LaunchAgents`, `/Library/LaunchDaemons`, `~/Library/LaunchAgents`
+- Backs up App Store preferences
+
+### Development Environment
+- Backs up SSH keys and config (`~/.ssh/`)
+- Backs up Git configuration (`.gitconfig`, `.gitignore_global`)
+- Backs up GPG keys (`~/.gnupg/`)
+- Backs up cloud credentials (AWS, Kubernetes, Docker)
+- Backs up dotfiles (`~/.bash_profile`, `.zshrc`, `.aliases`, `.exports`, etc.)
+- Backs up environment configs (`~/.config/`)
+
+### Package Managers & Tools
+- Creates Homebrew Brewfile for easy package reinstallation
+- Records npm global packages
+- Records asdf tool versions
+- Records runtime versions (.NET SDKs, Node, npm, Python, Ruby, Go)
+
+### IDE & Editor Settings
+- Backs up VS Code settings, keybindings, snippets, and extensions list
+- Backs up JetBrains IDE settings (Rider, IntelliJ, WebStorm, PyCharm, etc.)
+- Backs up Sublime Text and Sublime Merge settings
+- Backs up Alfred workflows and preferences
+
+### Additional
+- Backs up custom fonts (`~/Library/Fonts/`)
+- Creates list of all installed applications (for reference)
+- Backs up launch items (`/Library/LaunchAgents`, `/Library/LaunchDaemons`, `~/Library/LaunchAgents`)
+- Generates comprehensive `RESTORE.md` guide with step-by-step restore instructions
 
 ## Notes
 
