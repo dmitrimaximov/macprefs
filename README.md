@@ -4,6 +4,8 @@ A tool to backup and restore Mac preferences.
 
 This will backup and restore Application as well as System Preferences.
 
+> **Note:** This is a fork with extended functionality. If you want to use this fork on a new Mac, see the [New Mac Setup](#new-mac-setup) section for instructions on cloning and running it directly.
+
 ## Motivation (.macos problems)
 
 I wanted a solution to back up my settings for my Mac and one didn't really exist. Time Machine is a bit overkill for this.
@@ -144,7 +146,20 @@ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
-### 2. Install macprefs
+### 2. Clone macprefs
+
+Since you're using a fork, clone it directly (Python 3 comes pre-installed on modern macOS):
+
+```bash
+# Clone your fork
+git clone https://github.com/yourusername/macprefs.git ~/macprefs
+cd ~/macprefs
+
+# Make the script executable
+chmod +x macprefs
+```
+
+Alternatively, if you want to use the original version via Homebrew:
 
 ```bash
 brew install clintmod/formulas/macprefs
@@ -168,11 +183,14 @@ Add Terminal.app to the Full Disk Access list.
 
 ```bash
 # If using the default Dropbox location, just run:
-macprefs restore
+~/macprefs/macprefs restore
 
 # Or specify a custom backup location:
 export MACPREFS_BACKUP_DIR="/path/to/your/backup/folder"
-macprefs restore
+~/macprefs/macprefs restore
+
+# If you installed via Homebrew instead, just use:
+# macprefs restore
 ```
 
 ### 6. Install your applications via Homebrew
