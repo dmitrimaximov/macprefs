@@ -1,5 +1,7 @@
 from os import environ, makedirs, path, getenv
 import getpass
+import socket
+from datetime import datetime
 
 
 def get_macprefs_dir():
@@ -7,7 +9,11 @@ def get_macprefs_dir():
     if 'MACPREFS_BACKUP_DIR' in environ:
         backup_dir = environ['MACPREFS_BACKUP_DIR']
     else:
-        backup_dir = path.join(get_home_dir(), 'Dropbox', 'MacPrefsBackup')
+        # Get machine name (hostname without domain)
+        machine_name = socket.gethostname().split('.')[0]
+        # Add machine name and date to backup path for automatic versioning
+        today = datetime.now().strftime('%Y-%m-%d')
+        backup_dir = path.join(get_home_dir(), 'Dropbox', 'MacPrefsBackup', machine_name, today)
     ensure_exists(backup_dir)
     return backup_dir
 
