@@ -12,6 +12,19 @@ import ssh_files
 import startup_items
 import app_store_preferences
 import internet_accounts
+import git_config
+import cloud_credentials
+import gpg_keys
+import package_managers
+import vscode_settings
+import env_configs
+import jetbrains_settings
+import custom_fonts
+import applications_list
+import runtime_versions
+import alfred_settings
+import sublime_settings
+import restore_readme
 
 preference_choices = [
     'system_preferences',
@@ -21,7 +34,19 @@ preference_choices = [
     'ssh_files',
     'preferences',
     'app_store_preferences',
-    'internet_accounts'
+    'internet_accounts',
+    'git_config',
+    'cloud_credentials',
+    'gpg_keys',
+    'package_managers',
+    'vscode_settings',
+    'env_configs',
+    'jetbrains_settings',
+    'custom_fonts',
+    'applications_list',
+    'runtime_versions',
+    'alfred_settings',
+    'sublime_settings'
 ]
 
 def backup(choices=[]):
@@ -41,8 +66,36 @@ def backup(choices=[]):
         app_store_preferences.backup()
     if not choices or 'internet_accounts' in choices:
         internet_accounts.backup()
+    if not choices or 'git_config' in choices:
+        git_config.backup()
+    if not choices or 'cloud_credentials' in choices:
+        cloud_credentials.backup()
+    if not choices or 'gpg_keys' in choices:
+        gpg_keys.backup()
+    if not choices or 'package_managers' in choices:
+        package_managers.backup()
+    if not choices or 'vscode_settings' in choices:
+        vscode_settings.backup()
+    if not choices or 'env_configs' in choices:
+        env_configs.backup()
+    if not choices or 'jetbrains_settings' in choices:
+        jetbrains_settings.backup()
+    if not choices or 'custom_fonts' in choices:
+        custom_fonts.backup()
+    if not choices or 'applications_list' in choices:
+        applications_list.backup()
+    if not choices or 'runtime_versions' in choices:
+        runtime_versions.backup()
+    if not choices or 'alfred_settings' in choices:
+        alfred_settings.backup()
+    if not choices or 'sublime_settings' in choices:
+        sublime_settings.backup()
+
+    # Generate restore guide
+    restore_readme.generate_readme()
 
     print('Backup Complete.')
+    print('Restore guide generated at: ' + config.get_macprefs_dir() + '/RESTORE.md')
 
 
 def restore(choices=[]):
@@ -62,6 +115,30 @@ def restore(choices=[]):
         app_store_preferences.restore()
     if not choices or 'internet_accounts' in choices:
         internet_accounts.restore()
+    if not choices or 'git_config' in choices:
+        git_config.restore()
+    if not choices or 'cloud_credentials' in choices:
+        cloud_credentials.restore()
+    if not choices or 'gpg_keys' in choices:
+        gpg_keys.restore()
+    if not choices or 'package_managers' in choices:
+        package_managers.restore()
+    if not choices or 'vscode_settings' in choices:
+        vscode_settings.restore()
+    if not choices or 'env_configs' in choices:
+        env_configs.restore()
+    if not choices or 'jetbrains_settings' in choices:
+        jetbrains_settings.restore()
+    if not choices or 'custom_fonts' in choices:
+        custom_fonts.restore()
+    if not choices or 'applications_list' in choices:
+        applications_list.restore()
+    if not choices or 'runtime_versions' in choices:
+        runtime_versions.restore()
+    if not choices or 'alfred_settings' in choices:
+        alfred_settings.restore()
+    if not choices or 'sublime_settings' in choices:
+        sublime_settings.restore()
 
     print('Restore Complete.')
 
