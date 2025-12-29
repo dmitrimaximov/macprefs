@@ -31,7 +31,8 @@ def copy_dir(src, dest, with_sudo=False):
     extra_args = []
     if log.root.getEffectiveLevel() == log.DEBUG:
         extra_args = ['-vv']
-    command = ['rsync', '-a'] + extra_args + [src, dest]
+    # Exclude socket files which rsync can't copy
+    command = ['rsync', '-a', '--exclude=*.sock', '--exclude=*.socket'] + extra_args + [src, dest]
     if with_sudo:
         command = ['sudo'] + command
     execute_shell(command)
