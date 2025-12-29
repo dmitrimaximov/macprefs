@@ -1,10 +1,34 @@
-# Mac Preferences Backup
+# Mac Preferences Backup (Extended Fork)
 
-A tool to backup and restore Mac preferences.
+A comprehensive tool to backup and restore your complete Mac development environment, system preferences, and applications.
 
-This will backup and restore Application as well as System Preferences.
+> **🚀 This is an extended fork** of [clintmod/macprefs](https://github.com/clintmod/macprefs) with significant enhancements for developers who want to sync their entire Mac setup across multiple machines.
 
-> **Note:** This is a fork with extended functionality. If you want to use this fork on a new Mac, see the [New Mac Setup](#new-mac-setup) section for instructions on cloning and running it directly.
+## What Makes This Fork Different?
+
+This fork extends the original macprefs with 20+ backup modules covering your entire development environment:
+
+**New Development Environment Support:**
+- 🔑 SSH keys and Git configuration
+- ☁️ Cloud credentials (AWS, Kubernetes, Docker)
+- 🔐 GPG keys with secure permissions
+- 📦 Package managers (Homebrew Brewfile, npm, asdf)
+- 💻 IDE settings (VS Code, JetBrains, Sublime Text)
+- 🎨 Custom fonts and Alfred workflows
+- 🛠️ Runtime versions tracking (.NET, Node, npm, Python, Ruby, Go)
+
+**Improved Backup System:**
+- 📅 Automatic date-based versioning (`YYYY-MM-DD`)
+- 🖥️ Multi-machine support (backups organized by hostname)
+- 📝 Auto-generated comprehensive restore guide (RESTORE.md)
+- 🔄 Dropbox-friendly structure for syncing across devices
+
+**Better macOS Compatibility:**
+- ✅ Modern Python 3 shebang (works with Homebrew)
+- ✅ Socket file exclusion (fixes Docker backup errors)
+- ✅ Expanded system preferences backup
+
+See the [New Mac Setup](#new-mac-setup) section for step-by-step instructions on using this fork.
 
 ## Motivation (.macos problems)
 
