@@ -108,8 +108,11 @@ cd ~/macprefs
 ```bash
 export MACPREFS_BACKUP_DIR="{backup_dir}"
 
-# Add to your shell config to persist
+# Add to your shell config to persist (zsh is default on macOS since Catalina)
 echo 'export MACPREFS_BACKUP_DIR="{backup_dir}"' >> ~/.zshrc
+
+# If you're using bash instead of zsh, use this:
+# echo 'export MACPREFS_BACKUP_DIR="{backup_dir}"' >> ~/.bash_profile
 ```
 
 ### Step 4: Restore All Settings
@@ -130,9 +133,13 @@ Now install Homebrew so you can restore your applications:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Follow the instructions to add Homebrew to your PATH
-# Usually something like:
+# For zsh (default on macOS):
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# For bash, use this instead:
+# echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+# eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
 ## Step 6: Install Applications via Homebrew
@@ -350,6 +357,123 @@ This backup includes:
 - 📋 Runtime versions (.NET, Node, npm, Python, Ruby)
 - 📋 VS Code extensions list
 - 📋 npm global packages list
+
+---
+
+## Alternative: Manual Section-by-Section Restore
+
+If you prefer to restore settings in phases or only restore specific components, you can use the `-t` flag to restore individual sections. Here's the recommended order:
+
+### Phase 1: Core Environment
+Restore your shell and development environment first:
+
+```bash
+# Set backup directory if needed
+export MACPREFS_BACKUP_DIR="{backup_dir}"
+
+# Restore dotfiles (shell configs)
+./macprefs restore -t dotfiles
+
+# Restore environment configs
+./macprefs restore -t env_configs
+
+# Restore Git configuration
+./macprefs restore -t git_config
+
+# Reload shell configuration
+source ~/.zshrc  # or source ~/.bash_profile for bash
+```
+
+### Phase 2: Credentials & Keys
+Restore access to services and repositories:
+
+```bash
+# Restore SSH keys
+./macprefs restore -t ssh_files
+
+# Restore GPG keys
+./macprefs restore -t gpg_keys
+
+# Restore cloud credentials (AWS, Kubernetes, Docker)
+./macprefs restore -t cloud_credentials
+```
+
+### Phase 3: System & UI Settings
+Restore system preferences and UI configuration:
+
+```bash
+# Restore system preferences
+./macprefs restore -t system_preferences
+
+# Restore Finder sidebar favorites
+./macprefs restore -t shared_file_lists
+
+# Restore all application preferences
+./macprefs restore -t preferences
+
+# Restore App Store preferences
+./macprefs restore -t app_store_preferences
+
+# Restore Internet Accounts
+./macprefs restore -t internet_accounts
+
+# Restore startup items
+./macprefs restore -t startup_items
+```
+
+### Phase 4: Development Tools
+Restore your IDE and editor settings:
+
+```bash
+# Restore custom fonts
+./macprefs restore -t custom_fonts
+
+# Restore VS Code settings
+./macprefs restore -t vscode_settings
+
+# Restore JetBrains IDE settings
+./macprefs restore -t jetbrains_settings
+
+# Restore Sublime Text settings
+./macprefs restore -t sublime_settings
+
+# Restore Alfred workflows
+./macprefs restore -t alfred_settings
+```
+
+### Phase 5: Package Information
+These commands create reference files but don't install packages:
+
+```bash
+# Reference: Brewfile and package lists
+./macprefs restore -t package_managers
+
+# Reference: Application lists
+./macprefs restore -t applications_list
+
+# Reference: Runtime version info
+./macprefs restore -t runtime_versions
+```
+
+### Quick Multi-Section Commands
+
+You can also combine multiple sections in one command:
+
+```bash
+# Restore core environment
+./macprefs restore -t dotfiles env_configs git_config
+
+# Restore security credentials
+./macprefs restore -t ssh_files gpg_keys cloud_credentials
+
+# Restore system settings
+./macprefs restore -t system_preferences shared_file_lists preferences app_store_preferences internet_accounts startup_items
+
+# Restore development tools
+./macprefs restore -t custom_fonts vscode_settings jetbrains_settings sublime_settings alfred_settings
+```
+
+**Note:** After restoring system preferences and application settings, log out and log back in (or restart) for all changes to take effect.
 
 ---
 
