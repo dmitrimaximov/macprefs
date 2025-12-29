@@ -95,7 +95,8 @@ def backup(choices=[]):
     restore_readme.generate_readme()
 
     print('Backup Complete.')
-    print('Restore guide generated at: ' + config.get_macprefs_dir() + '/RESTORE.md')
+    print('Backup saved to: ' + config.get_macprefs_dir())
+    print('Restore guide: ' + config.get_macprefs_dir() + '/RESTORE.md')
 
 
 def restore(choices=[]):
