@@ -12,10 +12,17 @@ def generate_readme():
     # Get current date for the backup timestamp
     backup_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+    # Extract date from backup path (if it ends with YYYY-MM-DD)
+    import os
+    backup_basename = os.path.basename(backup_dir)
+
     readme_content = f"""# Mac Preferences Restore Guide
 
 **Backup Date:** {backup_date}
 **Backup Location:** {backup_dir}
+
+> Note: Backups are automatically organized by date (YYYY-MM-DD). Each day's backup is stored
+> in a separate folder, giving you version history and the ability to rollback if needed.
 
 This guide provides step-by-step instructions to restore your Mac setup from this backup.
 
@@ -70,30 +77,21 @@ This will automatically restore:
 
 Follow these steps in order for the best experience.
 
-### Step 1: Install Homebrew
+### Step 1: Install Xcode Command Line Tools
 
-Homebrew will be used to install most applications and tools.
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Follow the instructions to add Homebrew to your PATH
-# Usually something like:
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-### Step 2: Install macprefs Tool Dependencies
+First, install the command line developer tools (includes git, needed to clone macprefs):
 
 ```bash
-# Install Python 3 (if not already installed)
-brew install python@3
-
-# Install rsync (usually pre-installed, but ensure it's available)
-which rsync
+xcode-select --install
 ```
 
-### Step 3: Clone/Copy macprefs Tool
+Click "Install" when prompted and wait for it to complete. Verify installation:
+
+```bash
+git --version
+```
+
+### Step 2: Clone/Copy macprefs Tool
 
 ```bash
 # Option 1: Clone from git (if you have it in a repo)
@@ -105,7 +103,7 @@ which rsync
 cd ~/macprefs
 ```
 
-### Step 4: Set Backup Directory
+### Step 3: Set Backup Directory
 
 ```bash
 export MACPREFS_BACKUP_DIR="{backup_dir}"
@@ -114,7 +112,7 @@ export MACPREFS_BACKUP_DIR="{backup_dir}"
 echo 'export MACPREFS_BACKUP_DIR="{backup_dir}"' >> ~/.zshrc
 ```
 
-### Step 5: Restore All Settings
+### Step 4: Restore All Settings
 
 ```bash
 ./macprefs restore
@@ -123,6 +121,19 @@ echo 'export MACPREFS_BACKUP_DIR="{backup_dir}"' >> ~/.zshrc
 Wait for the restore to complete. This will take a few minutes.
 
 ---
+
+## Step 5: Install Homebrew
+
+Now install Homebrew so you can restore your applications:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Follow the instructions to add Homebrew to your PATH
+# Usually something like:
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
 
 ## Step 6: Install Applications via Homebrew
 
