@@ -159,7 +159,21 @@ macprefs restore -t system_preferences startup_items preferences app_store_prefe
 
 If you're setting up a brand new Mac and want to restore your settings, follow these steps:
 
-### 1. Clone macprefs
+### 1. Install Xcode Command Line Tools
+
+First, install the command line developer tools (includes git):
+
+```bash
+xcode-select --install
+```
+
+Click "Install" when prompted and wait for it to complete. Verify installation:
+
+```bash
+git --version
+```
+
+### 2. Clone macprefs
 
 Since you're using a fork, clone it directly (Python 3 comes pre-installed on modern macOS):
 
@@ -178,7 +192,7 @@ Alternatively, if you want to use the original version, install via Homebrew (re
 brew install clintmod/formulas/macprefs
 ```
 
-### 2. Enable Full Disk Access for Terminal
+### 3. Enable Full Disk Access for Terminal
 
 ```bash
 open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
@@ -186,13 +200,13 @@ open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
 
 Add Terminal.app to the Full Disk Access list.
 
-### 3. Set up Dropbox (if using Dropbox for backups)
+### 4. Set up Dropbox (if using Dropbox for backups)
 
 - Download and install [Dropbox](https://www.dropbox.com/install)
 - Sign in and wait for your Configuration/Backup folder to sync
 - Make sure your backup folder is fully synced before proceeding
 
-### 4. Restore your preferences
+### 5. Restore your preferences
 
 ```bash
 # If using the default Dropbox location, just run:
@@ -206,7 +220,7 @@ export MACPREFS_BACKUP_DIR="/path/to/your/backup/folder"
 # macprefs restore
 ```
 
-### 5. Install Homebrew (for restoring applications)
+### 6. Install Homebrew (for restoring applications)
 
 Now install Homebrew so you can restore your applications:
 
@@ -219,7 +233,7 @@ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
-### 6. Install your applications via Homebrew
+### 7. Install your applications via Homebrew
 
 If you backed up your Homebrew packages, restore them:
 
@@ -237,7 +251,7 @@ This will automatically install:
 - All fonts
 - Everything else you had installed via Homebrew
 
-### 7. Check the detailed restore guide
+### 8. Check the detailed restore guide
 
 After running the backup, a comprehensive `RESTORE.md` guide is generated in your backup folder with step-by-step instructions for:
 - Installing runtime versions (.NET, Node.js)
